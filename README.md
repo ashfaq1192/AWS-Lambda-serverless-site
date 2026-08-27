@@ -153,6 +153,34 @@ The issue is the IAM role, not the Lambda code. SAM deploys through CloudFormati
 
 **Fix:** Ask an AWS administrator to update the EC2 role named `MLOps-EC2-S3-Access`. *(Do not put access keys in this repository)*. After the role is updated, run `sam deploy` again.
 
+**How to Fix (IAM Setup):** 
+Ask an AWS administrator to update the EC2 role named `MLOps-EC2-S3-Access` by attaching an inline policy with the required deployment permissions. *(Do not put access keys in this repository)*. 
+
+The required JSON policy looks like this:
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:*",
+        "s3:*",
+        "iam:CreateRole",
+        "iam:AttachRolePolicy",
+        "iam:DetachRolePolicy",
+        "iam:DeleteRolePolicy",
+        "iam:GetRole",
+        "iam:GetRolePolicy",
+        "iam:PassRole",
+        "lambda:*",
+        "apigateway:*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
 ## Add a Static Website with S3
 
 S3 stores the frontend files; Lambda does not host HTML, CSS, or JavaScript. Create a `frontend/` directory containing `index.html`, CSS, and JavaScript. The JavaScript can call the API Gateway URL:
