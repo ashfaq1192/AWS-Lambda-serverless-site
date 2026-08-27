@@ -14,13 +14,12 @@ Cloud9 is not required for this project. The current workflow is VS Code, the AW
 
 ### What we did in this session:
 * Connected to the remote Linux server through VS Code.
-* Confirmed that the AWS CLI was already installed and that AWS access came from the EC2 IAM role `MLOps-EC2-S3-Access`.
+* While working with AWS CLI we see that AWS access came from the EC2 IAM role `MLOps-EC2-S3-Access`.
 * Installed the AWS SAM CLI on the remote server.
 * Created a Python 3.14 Hello World SAM application.
 * Built the application successfully.
-* Tried local invocation, which correctly reported that Docker or Finch was not installed.
-* Started guided deployment, which stopped because the EC2 role lacked CloudFormation permissions.
-* The application is built successfully, but it is not deployed until the IAM permission issue is fixed.
+* Started guided deployment, which stopped because the EC2 role lacked CloudFormation permissions so we added those.
+* The application is built successfully and is deployed.
 
 ---
 
@@ -67,7 +66,7 @@ sam init
 * **Structured JSON logging:** enabled
 * **Project name:** serverless-site
 
-*Note: The SAM wizard created `serverless-site/` inside the directory where it was run. That is why the final project path is `serverless-site/serverless-site`.*
+*Note: The SAM wizard created `serverless-site/` inside the directory where it was run.
 
 SAM may also display a telemetry message during `sam init`. To disable SAM CLI telemetry for the current shell, run:
 
@@ -78,10 +77,10 @@ export SAM_CLI_TELEMETRY=0
 
 ## 3. Build the Application
 
-Run SAM commands from the directory containing `template.yaml`. This project is nested one level deeper than its parent directory:
+Run SAM commands from the directory containing `template.yaml`.:
 
 ```bash
-cd ~/mlops-foundations/serverless-site/serverless-site
+
 sam build
 
 ```
@@ -150,8 +149,6 @@ If deployment fails with:
 > `not authorized to perform: cloudformation:CreateChangeSet`
 
 The issue is the IAM role, not the Lambda code. SAM deploys through CloudFormation, so the EC2 role must be allowed to create and update CloudFormation stacks and change sets. It also needs the required Lambda, API Gateway, S3, and IAM permissions; `iam:PassRole` is commonly required as well.
-
-**Fix:** Ask an AWS administrator to update the EC2 role named `MLOps-EC2-S3-Access`. *(Do not put access keys in this repository)*. After the role is updated, run `sam deploy` again.
 
 **How to Fix (IAM Setup):** 
 Ask an AWS administrator to update the EC2 role named `MLOps-EC2-S3-Access` by attaching an inline policy with the required deployment permissions. *(Do not put access keys in this repository)*. 
