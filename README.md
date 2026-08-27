@@ -207,11 +207,3 @@ sam delete --stack-name "serverless-site"
 
 *Delete any separately created S3 objects and buckets as well. An S3 bucket must be empty before it can be deleted.*
 
-```
-
-***
-
-**Are you ready for the next step?** 
-If your code is pushed to GitHub, your next step is to log into the **AWS Console**, find the `MLOps-EC2-S3-Access` IAM role, and add the permissions policy so you can successfully run `sam deploy --guided`. Let me know if you need the JSON policy for that role again!
-
-```
